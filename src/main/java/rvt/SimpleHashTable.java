@@ -3,39 +3,39 @@ package rvt;
 
 public class SimpleHashTable {
 
-    private final int size;
+    private final int capacity;
     private int elementCount;
     private String[] data;
     private int probCount;
 
-    public SimpleHashTable(int size) {
-        this.size = size;
+    public SimpleHashTable(int c) {
+        this.capacity = c;
         this.elementCount = 0;
-        data = new String[size];
+        data = new String[c];
     }
 
     public int size() {
-        return this.size;
+        return this.capacity;
     }
     public int getProbCount() {
         return this.probCount;
     }
 
     public void insert(int key, String value) {
-        if (this.elementCount == this.size) {
-            throw new IllegalStateException("Hash table is full (max "  + this.size + " elements)");
+        if (this.elementCount == this.capacity) {
+            throw new IllegalStateException("Hash table is full (max "  + this.capacity + " elements)");
         }
         int probingAttempt = 0;
-        int hashCode = (hashFunction(key) + probingAttempt) % this.size;
+        int hashCode = (hashFunction(key) + probingAttempt) % this.capacity;
         boolean isSpotFree = data[hashCode] == null;
         if (isSpotFree) {
             data[hashCode] = value;
             elementCount++;
         } else {
             while (!isSpotFree) {
-                probCount++;
+                this.probCount++;
                 probingAttempt++;
-                hashCode = (hashFunction(key) + probingAttempt) % this.size;
+                hashCode = (hashFunction(key) + probingAttempt) % this.capacity;
                 isSpotFree = data[hashCode] == null;
                 if (isSpotFree) {
                     data[hashCode] = value;
