@@ -1,30 +1,45 @@
 package rvt;
 
+
 public class SimpleHashTable {
 
-    private int capacity;
+    private final int size;
+    private int elementCount;
     private String[] data;
-    public int loopCount; // for testing
+    private int probCount;
 
-    public SimpleHashTable(int capacity) {
-        this.capacity = capacity;
-        data = new String[capacity];
+    public SimpleHashTable(int size) {
+        this.size = size;
+        this.elementCount = 0;
+        data = new String[size];
     }
-    // h(k) + i % S
+
+    public int size() {
+        return this.size;
+    }
+    public int getProbCount() {
+        return this.probCount;
+    }
+
     public void insert(int key, String value) {
+        if (this.elementCount == this.size) {
+            throw new IllegalStateException("Hash table is full (max "  + this.size + " elements)");
+        }
         int probingAttempt = 0;
-        int index = (hashFunction(key) + probingAttempt) % this.capacity;
-        boolean isSpotFree = data[index] == null;
+        int hashCode = (hashFunction(key) + probingAttempt) % this.size;
+        boolean isSpotFree = data[hashCode] == null;
         if (isSpotFree) {
-            data[index] = value;
+            data[hashCode] = value;
+            elementCount++;
         } else {
             while (!isSpotFree) {
-                loopCount++; // for testing
+                probCount++;
                 probingAttempt++;
-                index =(hashFunction(key) + probingAttempt) % this.capacity;
-                isSpotFree = data[index] == null;
+                hashCode = (hashFunction(key) + probingAttempt) % this.size;
+                isSpotFree = data[hashCode] == null;
                 if (isSpotFree) {
-                    data[index] = value;
+                    data[hashCode] = value;
+                    elementCount++;
                     break;
                 }
             }

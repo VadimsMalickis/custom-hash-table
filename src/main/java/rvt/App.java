@@ -2,12 +2,14 @@ package rvt;
 
 public class App {
     public static void main(String[] args) {
-         final int capacity = 1000;
-        SimpleHashTable table = new SimpleHashTable(capacity);
+        SimpleHashTable table = new SimpleHashTable(1000);
 
-        for (int i = 0; i < capacity; i++) {
-            table.insert(i, "HotDog " + i);
+        for (int i = 1; i <= table.size(); i++) {
+            table.insert(i, "Student Nr. " + i);
         }
-        System.out.println(table.loopCount);
+        System.out.println(table.getProbCount());
+    }   
+    public static int hash(int k) {
+        return k % (7 + 3);
     }
 }
