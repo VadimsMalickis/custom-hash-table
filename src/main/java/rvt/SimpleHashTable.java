@@ -6,12 +6,20 @@ public class SimpleHashTable {
         for (int i = 1; i <= table.getCapacity(); i++) {
             table.insert(i, "Student Nr. " + i);
         }
-        System.out.println(table.probCount);
+        System.out.println(table.find(9));
+    }
+    public class Element {
+        public int key;
+        public String value;
+        public Element(int k, String v) {
+            this.key = k;
+            this.value = v;
+        }
     }
 
     private final int capacity;
     private int elementCount;
-    private String[] data;
+    private Element[] data;
 
     // For hash table filling testing purposes
     private int probCount;
@@ -19,7 +27,7 @@ public class SimpleHashTable {
     public SimpleHashTable(int c) {
         this.capacity = c;
         this.elementCount = 0;
-        data = new String[c];
+        data = new Element[c];
     }
 
     public int getCapacity() {
@@ -33,7 +41,7 @@ public class SimpleHashTable {
         int hashCode = hashFunction(key);
         boolean isSpotFree = data[hashCode] == null;
         if (isSpotFree) {
-            data[hashCode] = value;
+            data[hashCode] = new Element(hashCode, value);
             elementCount++;
         } else {
             int probingAttempt = 0;
@@ -43,7 +51,7 @@ public class SimpleHashTable {
                 hashCode = hashFunction(key) + probingAttempt;
                 isSpotFree = data[hashCode] == null;
                 if (isSpotFree) {
-                    data[hashCode] = value;
+                    data[hashCode] = new Element(hashCode, value);
                     elementCount++;
                     break;
                 }
@@ -57,7 +65,7 @@ public class SimpleHashTable {
             throw new IllegalStateException("Hash table is empty.");
         }
         int hashCode = hashFunction(key);
-        boolean isElementFound = data[hashCode] != null;
+        boolean isElementFound = isElementFound(hashCode, key);
         if (isElementFound) {
             data[hashCode] = null;
             elementCount--;
@@ -67,7 +75,7 @@ public class SimpleHashTable {
                 this.probCount++;
                 probingAttempt++;
                 hashCode = hashFunction(key) + probingAttempt;
-                isElementFound = data[hashCode] != null;
+                isElementFound = isElementFound(hashCode, key);
                 if (isElementFound) {
                     data[hashCode] = null;
                     elementCount--;
@@ -82,18 +90,18 @@ public class SimpleHashTable {
             throw new IllegalStateException("Hash table is empty.");
         }
         int hashCode = hashFunction(key);
-        boolean isElementFound = data[hashCode] != null;
+        boolean isElementFound = isElementFound(hashCode, key);
         if (isElementFound) {
-            return data[hashCode];
+            return data[hashCode].value;
         } else {
             int probingAttempt = 0;
             while (!isElementFound) {
                 this.probCount++;
                 probingAttempt++;
                 hashCode = hashFunction(key) + probingAttempt;
-                isElementFound = data[hashCode] != null;
+                isElementFound = isElementFound(hashCode, key);
                 if (isElementFound) {
-                    return data[hashCode];
+                    return data[hashCode].value;
                 }
             }
         }
@@ -104,4 +112,7 @@ public class SimpleHashTable {
         return key % (7 + 3);
     }
 
+    private boolean isElementFound(int hashCode, int key) {
+        return data[hashCode] != null && hashCode == key;
+    }
 }
