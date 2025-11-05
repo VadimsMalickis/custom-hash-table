@@ -1,24 +1,22 @@
 package rvt;
 
 public class SimpleHashTable {
-    public static void main(String[] args) {
-        SimpleHashTable table = new SimpleHashTable(1000);
-        for (int i = 1; i <= table.getCapacity(); i++) {
-            table.insert(i, "Student Nr. " + i);
-        }
-        System.out.println(table.find(9));
-    }
-    public class Element {
+ 
+    public static class Element {
         public int key;
         public String value;
         public Element(int k, String v) {
             this.key = k;
             this.value = v;
+            System.out.println(
+                String.format("Added -> key: %d, value: %s", k, v)
+            );
         }
     }
 
     private final int capacity;
     private int elementCount;
+    private int lastIndex;
     private Element[] data;
 
     // For hash table filling testing purposes
@@ -27,6 +25,7 @@ public class SimpleHashTable {
     public SimpleHashTable(int c) {
         this.capacity = c;
         this.elementCount = 0;
+        this.lastIndex = this.capacity - 1;
         data = new Element[c];
     }
 
@@ -39,19 +38,19 @@ public class SimpleHashTable {
             throw new IllegalStateException("Hash table is full (max " + this.capacity + " elements)");
         }
         int hashCode = hashFunction(key);
-        boolean isSpotFree = data[hashCode] == null;
+        int index = hashCode % lastIndex;
+        boolean isSpotFree = data[index] == null;
         if (isSpotFree) {
-            data[hashCode] = new Element(hashCode, value);
+            data[index] = new Element(key, value);
             elementCount++;
         } else {
-            int probingAttempt = 0;
-            while (!isSpotFree) {
+            while (index <= lastIndex) {
                 this.probCount++; // testing
-                probingAttempt++;
-                hashCode = hashFunction(key) + probingAttempt;
-                isSpotFree = data[hashCode] == null;
+                index++;
+                System.out.println(index);
+                isSpotFree = data[index] == null;
                 if (isSpotFree) {
-                    data[hashCode] = new Element(hashCode, value);
+                    data[index] = new Element(key, value);
                     elementCount++;
                     break;
                 }
@@ -113,6 +112,8 @@ public class SimpleHashTable {
     }
 
     private boolean isElementFound(int hashCode, int key) {
-        return data[hashCode] != null && hashCode == key;
+        return data[hashCode] != null
+            && data[hashCode].key == key
+            && hashCode == key;
     }
 }
