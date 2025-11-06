@@ -47,7 +47,6 @@ public class SimpleHashTable {
             while (index <= lastIndex) {
                 this.probCount++; // testing
                 index++;
-                System.out.println(index);
                 isSpotFree = data[index] == null;
                 if (isSpotFree) {
                     data[index] = new Element(key, value);
@@ -64,19 +63,18 @@ public class SimpleHashTable {
             throw new IllegalStateException("Hash table is empty.");
         }
         int hashCode = hashFunction(key);
-        boolean isElementFound = isElementFound(hashCode, key);
-        if (isElementFound) {
-            data[hashCode] = null;
+        int index = hashCode % lastIndex;
+        boolean elementFound = isElementFound(index, key);
+        if (elementFound) {
+            data[index] = null;
             elementCount--;
         } else {
-            int probingAttempt = 0;
-            while (!isElementFound) {
-                this.probCount++;
-                probingAttempt++;
-                hashCode = hashFunction(key) + probingAttempt;
-                isElementFound = isElementFound(hashCode, key);
-                if (isElementFound) {
-                    data[hashCode] = null;
+            while (index <= lastIndex) {
+                this.probCount++; // testing
+                index++;
+                elementFound = isElementFound(index, key);
+                if (elementFound) {
+                    data[index] = null;
                     elementCount--;
                     break;
                 }
@@ -111,9 +109,8 @@ public class SimpleHashTable {
         return key % (7 + 3);
     }
 
-    private boolean isElementFound(int hashCode, int key) {
-        return data[hashCode] != null
-            && data[hashCode].key == key
-            && hashCode == key;
+    private boolean isElementFound(int index, int key) {
+        return data[index] != null
+            && data[index].key == key;
     }
 }
