@@ -6,8 +6,10 @@ public class App {
         for (int i = 1; i <= table.getCapacity(); i++) {
             table.insert(i, "Student Nr. " + i);
         }
-        table.remove(999);
-        System.out.println("End");
+        table.remove(589);
+        System.out.println(
+            table.find(589)
+        );
     }   
 
     public static int hash(int k) {

@@ -1,16 +1,16 @@
 package rvt;
 
 public class SimpleHashTable {
- 
+
     public static class Element {
         public int key;
         public String value;
+
         public Element(int k, String v) {
             this.key = k;
             this.value = v;
             System.out.println(
-                String.format("Added -> key: %d, value: %s", k, v)
-            );
+                    String.format("Added -> key: %d, value: %s", k, v));
         }
     }
 
@@ -84,21 +84,19 @@ public class SimpleHashTable {
 
     public String find(int key) {
         if (this.elementCount == 0) {
-            throw new IllegalStateException("Hash table is empty.");
+            return null;
         }
         int hashCode = hashFunction(key);
-        boolean isElementFound = isElementFound(hashCode, key);
-        if (isElementFound) {
-            return data[hashCode].value;
+        int index = hashCode % lastIndex;
+        boolean elementFound = isElementFound(index, key);
+        if (elementFound) {
+            return data[index].value;
         } else {
-            int probingAttempt = 0;
-            while (!isElementFound) {
-                this.probCount++;
-                probingAttempt++;
-                hashCode = hashFunction(key) + probingAttempt;
-                isElementFound = isElementFound(hashCode, key);
-                if (isElementFound) {
-                    return data[hashCode].value;
+            while (index < lastIndex) {
+                index++;
+                elementFound = isElementFound(index, key);
+                if (elementFound) {
+                    return data[index].value;
                 }
             }
         }
@@ -111,6 +109,6 @@ public class SimpleHashTable {
 
     private boolean isElementFound(int index, int key) {
         return data[index] != null
-            && data[index].key == key;
+                && data[index].key == key;
     }
 }
