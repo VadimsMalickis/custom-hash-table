@@ -7,9 +7,7 @@ public class App {
             table.insert(i, "Student Nr. " + i);
         }
         table.remove(589);
-        System.out.println(
-            table.find(589)
-        );
+        System.out.println(table.find(589));
     }   
 
     public static int hash(int k) {

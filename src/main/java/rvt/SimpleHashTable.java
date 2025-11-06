@@ -1,6 +1,14 @@
 package rvt;
 
 public class SimpleHashTable {
+    public static void main(String[] args) {
+        SimpleHashTable table = new SimpleHashTable(1000);
+        for (int i = 1; i <= table.getCapacity(); i++) {
+            table.insert(i, "Student Nr. " + i);
+        }
+        table.remove(589);
+        System.out.println(table.find(589));
+    }
 
     public static class Element {
         public int key;
@@ -10,7 +18,7 @@ public class SimpleHashTable {
             this.key = k;
             this.value = v;
             System.out.println(
-                    String.format("Added -> key: %d, value: %s", k, v));
+                String.format("Added -> key: %d, value: %s", k, v));
         }
     }
 
